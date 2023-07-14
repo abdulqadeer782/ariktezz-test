@@ -2,12 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     users: [],
+    isAuthenticate: false,
     loading: false,
     error: null,
     successMessage: null,
 };
 
-const userSlice = createSlice({
+const userReducer = createSlice({
     name: "user",
     initialState,
     reducers: {
@@ -98,6 +99,6 @@ export const {
     deleteUserSuccess,
     deleteUserFailure,
     clearStatus,
-} = userSlice.actions;
+} = userReducer.actions;
 
-export default userSlice.reducer;
+export default userReducer.reducer;

@@ -6,7 +6,7 @@ const initialState = {
     role: null,
 }
 
-export const loginSlice = createSlice({
+export const loginReducer = createSlice({
     name: 'login',
     initialState,
     reducers: {
@@ -24,6 +24,6 @@ export const loginSlice = createSlice({
     },
 })
 
-export const { login, logout } = loginSlice.actions
+export const { login, logout } = loginReducer.actions
 
-export default loginSlice.reducer
+export default loginReducer.reducer

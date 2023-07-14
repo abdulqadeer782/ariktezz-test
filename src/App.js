@@ -9,8 +9,7 @@ import { Provider, useSelector } from "react-redux";
 import store from "./store";
 
 function App() {
-    let state = useSelector(state => state)
-    console.log('s', state)
+
     return (
         <Provider store={store}>
             <BrowserRouter>
@@ -39,9 +38,9 @@ function App() {
 }
 
 const ProtectedRoute = ({ children }) => {
-    const isAuthenticated = true;
+    let user = useSelector(state => state.user)
 
-    if (!isAuthenticated) {
+    if (!user.isAuthenticate) {
         return <Navigate to="/login" replace />;
     }
 
