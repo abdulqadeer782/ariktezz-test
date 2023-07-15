@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Form, Input, Modal, Row, Select, Space, Table, Typography } from 'antd'
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
+import { useSelector } from 'react-redux'
 
 
-export default function Product({ products, categories, message }) {
+export default function Product() {
+    const products = useSelector(state => state.products)
     const [modalOpen, setModalOpen] = useState(false)
     const [modalTitle, setModalTitle] = useState('')
     const [selectedProduct, setSelectedProduct] = useState({})
@@ -14,10 +16,6 @@ export default function Product({ products, categories, message }) {
             setModalTitle("")
         }
     }, [modalOpen])
-
-    useEffect(() => {
-        if (message) alert(message)
-    }, [message])
 
     const handleDelete = (id) => console.log(id)
 
@@ -104,7 +102,7 @@ export default function Product({ products, categories, message }) {
             >
                 <Table
                     columns={columns}
-                    dataSource={products}
+                    dataSource={products || []}
                     rowKey={"id"}
                 />
             </Card>
@@ -113,14 +111,13 @@ export default function Product({ products, categories, message }) {
                 isOpen={modalOpen}
                 title={modalTitle}
                 onCancel={() => setModalOpen(false)}
-                categories={categories}
                 selectedProduct={selectedProduct}
             />
         </>
     )
 }
 
-const ProductModalForm = ({ isOpen, title, onCancel, categories, selectedProduct }) => {
+const ProductModalForm = ({ isOpen, title, onCancel, selectedProduct }) => {
     let [form] = Form.useForm()
 
     useEffect(() => {
@@ -169,26 +166,11 @@ const ProductModalForm = ({ isOpen, title, onCancel, categories, selectedProduct
                 >
                     <Input.TextArea placeholder='Enter Product Description!' readOnly={title.split(' ')[0] === "View"} />
                 </Form.Item>
+                :
+                <Form.Item name={'category'}>
+                    <Input readOnly={title.split(' ')[0] === "View"} />
+                </Form.Item>
 
-                {title.split(' ')[0] !== "View" ? <Form.Item
-                    name={'category'}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Please enter product category."
-                        }
-                    ]}
-                >
-                    <Select placeholder="Please Select Category!">
-                        {categories?.length > 0 && categories.map((cat) =>
-                            <Select.Option key={cat.id} value={cat.id}>{cat.name}</Select.Option>
-                        )}
-                    </Select>
-                </Form.Item> :
-                    <Form.Item name={'category'}>
-                        <Input readOnly={title.split(' ')[0] === "View"} />
-                    </Form.Item>
-                }
 
                 <Form.Item
                     name={'stock'}

@@ -1,10 +1,22 @@
 import React from 'react';
-import { Form, Input, Button, Card, Alert } from 'antd';
+import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../actions/userAction';
+import { useNavigate } from 'react-router';
 
 const LoginPage = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const { users } = useSelector(state => state.users)
+
     const onFinish = (values) => {
-        console.log(values)
+        const { username, password } = values;
+        let user = users.find(user => user.username === username && user.password === password)
+        if (user) {
+            navigate('/')
+            dispatch(loginUser(user));
+        } else message.error('Invalid username/password!')
     };
 
     return (

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
-import { DownOutlined, PoweroffOutlined } from '@ant-design/icons';
+import { Button, Layout, Menu, Typography } from 'antd';
+import { PoweroffOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../actions/userAction';
 
 const { Header, Content, Footer } = Layout;
 
@@ -18,10 +20,10 @@ const items = [
 ];
 
 const Main = ({ children }) => {
+    const dispatch = useDispatch();
     const location = useLocation()
     const navigate = useNavigate();
 
-    console.log('ffff', location.pathname)
     return (
         <Layout style={{ minHeight: '100vh' }} className="layout">
             <Header
@@ -33,17 +35,9 @@ const Main = ({ children }) => {
                 }}
             >
                 <Typography.Title level={3} style={{ margin: 0 }}>Arkitezz</Typography.Title>
-                <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={[location.pathname]}
-                    style={{ minWidth: '200px' }}
-                    items={items}
-                    onClick={(e) => navigate(e.key)}
-                />
 
                 {/* button for logout */}
-                <Button icon={<PoweroffOutlined />}>Logout</Button>
+                <Button onClick={() => dispatch(logoutUser())} icon={<PoweroffOutlined />}>Logout</Button>
             </Header>
             <Content
                 style={{

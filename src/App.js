@@ -4,9 +4,9 @@ import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import LoginPage from "./pages/login-page";
 import Main from "./pages";
 import Product from "./pages/product";
-import Users from "./pages/users";
 import { Provider, useSelector } from "react-redux";
 import store from "./store";
+import NotFound from "./pages/404";
 
 function App() {
 
@@ -15,19 +15,12 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="*" element={<NotFound />} />
                     <Route
-                        path="/product"
+                        path="/"
                         element={
                             <ProtectedRoute>
                                 <Product />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/users"
-                        element={
-                            <ProtectedRoute>
-                                <Users />
                             </ProtectedRoute>
                         }
                     />
@@ -38,9 +31,9 @@ function App() {
 }
 
 const ProtectedRoute = ({ children }) => {
-    let user = useSelector(state => state.user)
+    const isAuthenticate = useSelector(state => state.users.isLoggedIn)
 
-    if (!user.isAuthenticate) {
+    if (!isAuthenticate) {
         return <Navigate to="/login" replace />;
     }
 
