@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Col, Form, Input, Modal, Row, Select, Space, Table, Typography } from 'antd'
+import { Button, Card, Col, Form, Input, Modal, Row, Space, Table, Typography } from 'antd'
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { addProduct, deleteProduct, getProducts, updateProduct } from '../actions/productAction'
 
 
 export default function Product() {
-    const products = useSelector(state => state.products)
+    const dispatch = useDispatch()
+    const { products } = useSelector(state => state.products)
+    const { userType } = useSelector(state => state.users)
     const [modalOpen, setModalOpen] = useState(false)
     const [modalTitle, setModalTitle] = useState('')
     const [selectedProduct, setSelectedProduct] = useState({})
+
+
+    useEffect(() => {
+        dispatch(getProducts());
+    }, [])
+
 
     useEffect(() => {
         if (!modalOpen) {
@@ -17,7 +26,7 @@ export default function Product() {
         }
     }, [modalOpen])
 
-    const handleDelete = (id) => console.log(id)
+    const handleDelete = (record) => dispatch(deleteProduct(record.id, record.name))
 
     const columns = [
         {
@@ -31,11 +40,6 @@ export default function Product() {
             key: 'name',
         },
         {
-            title: 'Description',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
             title: 'Category',
             dataIndex: 'category',
             key: 'category',
@@ -46,9 +50,9 @@ export default function Product() {
             key: 'price',
         },
         {
-            title: 'Stock',
-            dataIndex: 'stock',
-            key: 'stock',
+            title: 'Quantity',
+            dataIndex: 'quantity',
+            key: 'quantity',
         },
         {
             title: 'Actions',
@@ -56,7 +60,7 @@ export default function Product() {
             key: 'actions',
             render: (_, record) => (
                 <Space>
-                    <Button
+                    {userType !== 'viewer' && <Button
                         title='Edit'
                         icon={<EditOutlined />}
                         onClick={() => {
@@ -64,7 +68,7 @@ export default function Product() {
                             setModalOpen(true)
                             setSelectedProduct(record)
                         }}
-                    />
+                    />}
                     <Button
                         title='View'
                         icon={<EyeOutlined />}
@@ -75,7 +79,7 @@ export default function Product() {
                             // setModalFooter(false)
                         }}
                     />
-                    <Button onClick={() => handleDelete(record.id)} title='Delete' icon={<DeleteOutlined />} danger />
+                    {userType === 'admin' && <Button onClick={() => handleDelete(record)} title='Delete' icon={<DeleteOutlined />} danger />}
                 </Space>
             )
         }
@@ -89,14 +93,14 @@ export default function Product() {
                         <Col>
                             <Typography.Title level={3}>Product</Typography.Title>
                         </Col>
-                        <Col>
+                        {userType !== 'viewer' && <Col>
                             <Button
                                 onClick={() => {
                                     setModalOpen(true)
                                     setModalTitle('Add Product')
                                 }}
                             >Add Product</Button>
-                        </Col>
+                        </Col>}
                     </Row>
                 )}
             >
@@ -118,6 +122,7 @@ export default function Product() {
 }
 
 const ProductModalForm = ({ isOpen, title, onCancel, selectedProduct }) => {
+    const dispatch = useDispatch();
     let [form] = Form.useForm()
 
     useEffect(() => {
@@ -127,7 +132,12 @@ const ProductModalForm = ({ isOpen, title, onCancel, selectedProduct }) => {
 
     const handleSubmit = () => {
         form.validateFields().then(result => {
-            console.log('result')
+            if (Object.keys(selectedProduct).length > 0) {
+                dispatch(updateProduct(selectedProduct.id, result))
+            }
+            else dispatch(addProduct(result))
+
+            onCancel()
         })
     }
 
@@ -155,38 +165,19 @@ const ProductModalForm = ({ isOpen, title, onCancel, selectedProduct }) => {
                 >
                     <Input placeholder='Enter Product Name!' readOnly={title.split(' ')[0] === "View"} />
                 </Form.Item>
+
                 <Form.Item
-                    name={'description'}
+                    name={'category'}
                     rules={[
                         {
                             required: true,
-                            message: "Please enter product description."
+                            message: "Please enter product category."
                         }
                     ]}
                 >
-                    <Input.TextArea placeholder='Enter Product Description!' readOnly={title.split(' ')[0] === "View"} />
-                </Form.Item>
-                :
-                <Form.Item name={'category'}>
-                    <Input readOnly={title.split(' ')[0] === "View"} />
+                    <Input placeholder='Please Product Category!' readOnly={title.split(' ')[0] === "View"} />
                 </Form.Item>
 
-
-                <Form.Item
-                    name={'stock'}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Please enter product quantity."
-                        },
-                        {
-                            pattern: new RegExp(/[0-9]/),
-                            message: "Field accepts numbers only.",
-                        },
-                    ]}
-                >
-                    <Input placeholder='Enter Product Quantity!' readOnly={title.split(' ')[0] === "View"} />
-                </Form.Item>
                 <Form.Item
                     name={'price'}
                     rules={[
@@ -201,6 +192,22 @@ const ProductModalForm = ({ isOpen, title, onCancel, selectedProduct }) => {
                     ]}
                 >
                     <Input placeholder='Enter Product Price!' readOnly={title.split(' ')[0] === "View"} />
+                </Form.Item>
+
+                <Form.Item
+                    name={'quantity'}
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please enter product quantity."
+                        },
+                        {
+                            pattern: new RegExp(/[0-9]/),
+                            message: "Field accepts numbers only.",
+                        },
+                    ]}
+                >
+                    <Input placeholder='Enter Product Quantity!' readOnly={title.split(' ')[0] === "View"} />
                 </Form.Item>
 
                 {title.split(' ')[0] !== "View" && <Row gutter={[20, 0]}>

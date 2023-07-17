@@ -1,0 +1,35 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "admin",
+      "type": "admin"
+    },
+    {
+      "username": "editor",
+      "password": "editor",
+      "type": "editor"
+    },
+    {
+      "username": "viewer",
+      "password": "viewer",
+      "type": "viewer"
+    }
+  ],
+  "products": [
+    {
+      "name": "test",
+      "category": "test",
+      "price": "432",
+      "quantity": "342",
+      "id": 1
+    },
+    {
+      "name": "test",
+      "category": "df",
+      "price": "432",
+      "quantity": "342",
+      "id": 2
+    }
+  ]
+}

@@ -9,7 +9,6 @@ import store from "./store";
 import NotFound from "./pages/404";
 
 function App() {
-
     return (
         <Provider store={store}>
             <BrowserRouter>

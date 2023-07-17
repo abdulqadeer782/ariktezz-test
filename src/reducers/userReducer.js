@@ -1,40 +1,29 @@
-import { LOGIN_USER, LOGOUT_USER } from '../actions/actionTypes';
+import { GET_USERS, LOGIN_USER, LOGOUT_USER } from '../actions/actionTypes';
 
 const initialState = {
-    users: [
-        {
-            username: 'admin',
-            password: 'admin',
-            type: 'admin',
-        },
-        {
-            username: 'editor',
-            password: 'editor',
-            type: 'editor',
-        },
-        {
-            username: 'viewer',
-            password: 'viewer',
-            type: 'viewer',
-        },
-    ],
-    isLoggedIn: false,
-    currentUser: null,
+    users: [],
+    isLoggedIn: localStorage.getItem('is_login') ? true : false,
+    userType: localStorage.getItem('user_type') || null,
 };
 
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
+        case GET_USERS:
+            return {
+                ...state,
+                users: action.payload
+            }
         case LOGIN_USER:
             return {
                 ...state,
                 isLoggedIn: true,
-                currentUser: action.payload,
+                userType: action.payload,
             };
         case LOGOUT_USER:
             return {
                 ...state,
                 isLoggedIn: false,
-                currentUser: null,
+                userType: null,
             };
         default:
             return state;

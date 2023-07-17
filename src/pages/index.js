@@ -1,29 +1,13 @@
 import React from 'react';
-import { Button, Layout, Menu, Typography } from 'antd';
+import { Button, Layout, Typography } from 'antd';
 import { PoweroffOutlined } from '@ant-design/icons';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../actions/userAction';
 
 const { Header, Content, Footer } = Layout;
 
-
-const items = [
-    {
-        label: 'Users',
-        key: '/users',
-    },
-    {
-        label: 'Product',
-        key: '/product',
-    },
-];
-
 const Main = ({ children }) => {
     const dispatch = useDispatch();
-    const location = useLocation()
-    const navigate = useNavigate();
-
     return (
         <Layout style={{ minHeight: '100vh' }} className="layout">
             <Header

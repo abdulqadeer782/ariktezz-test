@@ -1,22 +1,29 @@
-import React from 'react';
-import { Form, Input, Button, Card, message } from 'antd';
+import React, { useEffect } from 'react';
+import { Form, Input, Button, Card } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../actions/userAction';
+import { getUsers, loginUser } from '../actions/userAction';
 import { useNavigate } from 'react-router';
+import { openNotification } from '../helpers/openNotification';;
 
 const LoginPage = () => {
+    const { users } = useSelector(state => state.users)
     const dispatch = useDispatch();
     const navigate = useNavigate()
-    const { users } = useSelector(state => state.users)
+
+    useEffect(() => {
+        dispatch(getUsers())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const onFinish = (values) => {
-        const { username, password } = values;
+        const { username, password } = values
         let user = users.find(user => user.username === username && user.password === password)
         if (user) {
+            openNotification('success', 'Loggedin successfylly.')
             navigate('/')
-            dispatch(loginUser(user));
-        } else message.error('Invalid username/password!')
+            dispatch(loginUser(user))
+        } else openNotification('error', 'Invalid username/password.')
     };
 
     return (
