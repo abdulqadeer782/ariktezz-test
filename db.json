@@ -20,7 +20,7 @@
     {
       "name": "test",
       "category": "test",
-      "price": "432",
+      "price": "111",
       "quantity": "342",
       "id": 1
     },
@@ -30,6 +30,20 @@
       "price": "432",
       "quantity": "342",
       "id": 2
+    },
+    {
+      "name": "tdes",
+      "category": "dfsafsd",
+      "price": "342",
+      "quantity": "543",
+      "id": 3
+    },
+    {
+      "name": "tempora34",
+      "category": "test",
+      "price": "32",
+      "quantity": "3421412",
+      "id": 4
     }
   ]
 }

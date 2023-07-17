@@ -9,7 +9,7 @@ export const getUsers = () => dispatch => {
 export const loginUser = (user) => dispatch => {
     localStorage.setItem('is_login', true)
     localStorage.setItem('user_type', user.type)
-    dispatch(loginUserSuccess(user))
+    dispatch(loginUserSuccess(user.type))
 }
 
 export const logoutUser = () => dispatch => {

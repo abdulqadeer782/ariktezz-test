@@ -18,7 +18,7 @@ const Main = ({ children }) => {
                     backgroundColor: '#fff'
                 }}
             >
-                <Typography.Title level={3} style={{ margin: 0 }}>Arkitezz</Typography.Title>
+                <Typography.Title level={3} style={{ margin: 0 }}>Arkitektz</Typography.Title>
 
                 {/* button for logout */}
                 <Button onClick={() => dispatch(logoutUser())} icon={<PoweroffOutlined />}>Logout</Button>
